@@ -7,7 +7,8 @@ As a practice with the use of objects in javascript I have written this terminal
 
 ## Installation
 - 1 Clone into a local folder using $ git clone
-- 2 Run $ npm run dev
+- 2 Run 'npm install'
+- 2 Run 'npm run dev'
 
 ## Usage
 Open the vite emulated webserver in a browser.
