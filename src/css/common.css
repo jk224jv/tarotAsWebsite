@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+:root {
+  --background-color: white;
+  --color: black;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,14 +15,16 @@ html{
   font-family: monospace;
   font-size: 16px;
   line-height: 1rem;
-  color: limegreen;
+  color: var(--color);
   width: 100%;
+  min-width: 680px;
+  min-height: 480px;
   height: 100%;
 }
 
 body {
   height: 100%;
-  background: linear-gradient(#101010 100%, rgba(16, 16, 16, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.03));
+  background: linear-gradient(var(--background-color) 100%, rgba(16, 16, 16, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.03));
 	background-size: 100% 3px, 6px 100%;
   background-color: black;
   overflow: hidden;
@@ -71,19 +78,19 @@ div.buttons {
 div.buttons button {
   padding:5px;
   width: 150px;
-  color: limegreen;
+  color: var(--color);
   font-weight: bold;
   background-color: inherit;
-  border-color: limegreen;
+  border-color: var(--color);
   border-radius: 15px;
   border-width: 2px;
   border-style: solid;
-  box-shadow: 2px 2px 2px limegreen;
+  box-shadow: 2px 2px 2px var(--color);
 
 }
 
 div.buttons button:hover {
-  box-shadow: 3px 3px 3px  lightgreen;
+  box-shadow: 3px 3px 3px  var(--color);
   background-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -96,8 +103,8 @@ canvas,
 .credits {
   display: block;
   background-color: inherit;
-  border-color: limegreen;
-  box-shadow: 2px 2px 2px limegreen;
+  border-color: var(--color);
+  box-shadow: 2px 2px 2px var(--color);
   border-radius: 15px;
   border-width: 2px;
   border-style: solid;
@@ -106,7 +113,20 @@ canvas,
   margin-left: 10%;
 }
 
+#credits {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap:15px;
+  height: 80%;
+}
+
+#credits hr {
+  width: 40%;
+}
 
 .hidden {
-  display: none;
+  display: none !important;
 }
