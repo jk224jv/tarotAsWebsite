@@ -1,0 +1,33 @@
+{
+  "name": "switch-master",
+  "version": "1.0.0",
+  "description": "Game where you set railway switches to route trains to their destination.",
+  "type": "module",
+  "browser": "./src/js/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "lint": "npx eslint ./src || exit 0",
+    "lint:fix": "npx eslint ./src --fix || exit 0"
+  },
+  "keywords": [
+    "class",
+    "train",
+    "game",
+    "array",
+    "set timeout"
+  ],
+  "author": "Jimmy Karlsson <jk224jv@student.lnu.se>",
+  "license": "MIT",
+  "dependencies": {
+    "keypress": "^0.2.1",
+    "readline": "^1.3.0",
+    "@lnu/eslint-config": "^1.1.6",
+    "jest": "^28.1.3"
+  },
+  "devDependencies": {
+  "@lnu/eslint-config": "^1.1.5",
+  "vite": "^3.0.7"
+  }
+}
