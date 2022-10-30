@@ -31,12 +31,10 @@ function main () {
   const btnCardOftheDay = document.querySelector('#cardOfTheDay')
   const btnThreeCardsSpread = document.getElementById('threeCardSpread')
   const btnExit = document.getElementById('exit')
-  const btnSetting = document.getElementById('settings')
 
   btnCardOftheDay.addEventListener('click', cardOftheDay)
   btnThreeCardsSpread.addEventListener('click', threeCardsSpread)
   btnExit.addEventListener('click', exit)
-  btnSetting.addEventListener('click', settings)
 
   const hrLines = document.getElementsByClassName('line')
 
@@ -75,7 +73,7 @@ function applySettings () {
   tarotDeck.settings.canvasHeight = canvas.height
   tarotDeck.settings.canvasWidth = canvas.width
   tarotDeck.settings.cardsHeight = canvas.height * 0.7
-  tarotDeck.settings.cardsWidth = Math.floor((canvas.width) / 5)
+  tarotDeck.settings.cardsWidth = Math.max(Math.floor((canvas.width) / 5), (60 * 4 + 5))
   console.log(tarotDeck.settings.cardsWidth)
 }
 
@@ -97,10 +95,43 @@ function threeCardsSpread () {
  * Displays the credits... The Omnissiah have to be blessed somewhere.
  */
 function exit () {
-  const divCredits = document.getElementById('credits')
+  tarotDeck.clear()
   const canvas = document.getElementById('surface')
-  canvas.classList.toggle('hidden')
-  divCredits.classList.toggle('hidden')
+  const ctx = canvas.getContext('2d')
+  ctx.strokeStyle = 'limegreen'
+  ctx.fillStyle = 'limegreen'
+  ctx.shadowColor = 'green'
+  ctx.shadowBlur = 15
+  const xOrigin = Math.floor(canvas.width / 2)
+  const yOringin = Math.floor(canvas.height / 5)
+  ctx.font = '18px monospace'
+  ctx.textAlign = 'center'
+  ctx.fillText('++ May the machinespirit correctly preform your computations and your functions be pure. ++', xOrigin, yOringin)
+  ctx.lineWidth = 5
+  ctx.lineCap = 'round'
+  ctx.beginPath()
+  ctx.moveTo(Math.floor(canvas.width * 0.2), yOringin + 35)
+  ctx.lineTo(Math.floor(canvas.width * 0.8), yOringin + 35)
+  ctx.stroke()
+
+  ctx.font = '36px monospace'
+  ctx.lineWidth = 1
+  ctx.strokeText('The Omnissiah´s tarot', xOrigin, yOringin + 85)
+  ctx.font = '18px monospace'
+  ctx.fillText('by', xOrigin, yOringin + 110)
+  ctx.font = 'italic 24px monospace'
+  ctx.fillText('Jimmy Karlsson', xOrigin, yOringin + 140)
+  ctx.font = ' 18px monospace'
+  ctx.strokeText('codesmith - junior apprentice grade', xOrigin, yOringin + 165)
+  ctx.fillText('Schoolarium : Linnéuniversitetet', xOrigin, yOringin + 190)
+  ctx.fillText('Holy Terra', xOrigin, yOringin + 210)
+  ctx.fillText('++ Praise the Omnissiah! ++', xOrigin, yOringin + 290)
+  ctx.lineWidth = 5
+  ctx.lineCap = 'round'
+  ctx.beginPath()
+  ctx.moveTo(Math.floor(canvas.width * 0.2), yOringin + 240)
+  ctx.lineTo(Math.floor(canvas.width * 0.8), yOringin + 240)
+  ctx.stroke()
 }
 /**
  * Display settings form and handle new settings.

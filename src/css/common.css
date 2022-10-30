@@ -17,8 +17,8 @@ html{
   line-height: 1rem;
   color: var(--color);
   width: 100%;
-  min-width: 680px;
-  min-height: 480px;
+  min-width: 1024px;
+  min-height: 840px;
   height: 100%;
 }
 
@@ -26,7 +26,7 @@ body {
   height: 100%;
   background: linear-gradient(var(--background-color) 100%, rgba(16, 16, 16, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.03));
 	background-size: 100% 3px, 6px 100%;
-  background-color: black;
+  background-position: center;
   overflow: hidden;
   display: grid;
   gap: 15px;
@@ -56,11 +56,9 @@ main {
 }
 
 .topline{
-  width: calc(90%);
-  margin-left: 5%;
+  width: calc(100%);
   display:flex;
   flex-flow: row;
-  flex-wrap: nowrap;
   justify-content: space-evenly;
 }
 
@@ -110,7 +108,8 @@ canvas,
   border-style: solid;
   width: 90%;
   height: calc(80%);
-  margin-left: 5%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #credits {
@@ -131,4 +130,9 @@ canvas,
   display: none !important;
 }
 
+@media screen and (max-width: 1400px) {
+  canvas{
+    width: 100%;
+  }
+}
 

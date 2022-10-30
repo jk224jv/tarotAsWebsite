@@ -499,7 +499,7 @@ export const tarotDeck = {
 
     19: {
       name: 'The Moon',
-      uprighth: 'Unconsciousness, illusions, intuition',
+      upright: 'Unconsciousness, illusions, intuition',
       reversed: 'Confusion, fear, misinterpretation'
     },
 
@@ -597,6 +597,8 @@ export const tarotDeck = {
   writeCardFrame (x, y) {
     const canvas = document.getElementById('surface')
     const ctx = canvas.getContext('2d')
+    ctx.shadowColor = 'green'
+    ctx.shadowBlur = 15
     ctx.lineWidth = 0.1
     ctx.globalAlpha = 1
     ctx.fillStyle = this.settings.textColor
@@ -613,10 +615,13 @@ export const tarotDeck = {
    */
   writeCardContent (x, y, pulledCard, significance) {
     const ctx = document.getElementById('surface').getContext('2d')
+    ctx.shadowColor = ''
+    ctx.shadowBlur = 0
     let cardSuit = ''
     let cardSuitIcon = ''
     let card = 0
     let turned = ''
+    const iconSize = this.settings.cardsWidth / 5
 
     // get position of card significance and write
     ctx.font = '24px monospace'
@@ -674,21 +679,32 @@ export const tarotDeck = {
     if (pulledCard < 56) {
       for (let i = 0; i < this.cardsTemplate[card].top; i++) {
         ctx.drawImage(cardSuitIcon,
-          (x + 15 + 60 * i),
-          y + 15)
+          (x + iconSize / 4 + iconSize * i),
+          y + iconSize / 4)
       }
     }
 
     // get to location for Center Icons and write
     if (pulledCard > 56) {
       const cultLogo = document.getElementById('center')
-      ctx.drawImage(cultLogo, x + Math.floor(this.settings.cardsWidth / 2) - 60, y + Math.floor(this.settings.cardsHeight / 2) - 60, 120, 120)
+      ctx.drawImage(
+        cultLogo,
+        x + Math.floor(this.settings.cardsWidth / 2) - iconSize,
+        y + Math.floor(this.settings.cardsHeight / 2) - 60,
+        120, 120)
+    } else if (card > 10) {
+      ctx.fillText(
+        `${this.cardsTemplate[card].center}`,
+        x + Math.floor(this.settings.cardsWidth / 2),
+        y + Math.floor(this.settings.cardsHeight / 2)
+      )
     } else {
       const icons = this.cardsTemplate[card].center
       for (let i = 0; i < icons; i++) {
-        ctx.drawImage(cardSuitIcon,
-          (x + Math.floor(this.settings.cardsWidth / 2) - (icons * 30) + (60 * i)),
-          y + Math.floor(this.settings.cardsHeight / 2) - 30)
+        ctx.drawImage(
+          cardSuitIcon,
+          (x + Math.floor(this.settings.cardsWidth / 2) - (icons * (iconSize / 2)) + (iconSize * i)),
+          y + Math.floor(this.settings.cardsHeight / 2) - iconSize / 2)
       }
     }
 
@@ -698,16 +714,18 @@ export const tarotDeck = {
       for (let i = 0; i < this.cardsTemplate[card].bottom; i++) {
         ctx.drawImage(
           cardSuitIcon,
-          (x + this.settings.cardsWidth - 15 - (icons * 60) + (60 * i)),
-          (y + this.settings.cardsHeight - 75))
+          (x + this.settings.cardsWidth - (iconSize / 3) - (icons * iconSize) + (iconSize * i)),
+          (y + this.settings.cardsHeight - (iconSize * 1.5)))
       }
     }
 
     // get to location of description and write
+    console.log(`${cardSuit} ${card} ${turned}`)
     try {
       ctx.fillText(this[cardSuit][card][turned],
         x + this.settings.cardsWidth / 2,
-        y + this.settings.cardsHeight + 25)
+        y + this.settings.cardsHeight + 35,
+        this.settings.cardsWidth * 1.5)
     } catch (error) {
       console.error(`Error : trying to located ${card}, ${cardSuit}, ${turned}`)
     }
@@ -751,7 +769,7 @@ export const tarotDeck = {
     for (let i = 0; i < this.pulledCards.length; i++) {
       this.writeCard(
         Math.floor((0.5 * xDistance) + (1.5 * xDistance * i)),
-        this.settings.canvasHeight * 0.15,
+        this.settings.canvasHeight * 0.15 + ((i % 2) * 20),
         this.pulledCards[i], significance[i])
     }
   },
