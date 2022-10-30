@@ -108,9 +108,9 @@ canvas,
   border-radius: 15px;
   border-width: 2px;
   border-style: solid;
-  width: 80%;
+  width: 90%;
   height: calc(80%);
-  margin-left: 10%;
+  margin-left: 5%;
 }
 
 #credits {
@@ -130,3 +130,5 @@ canvas,
 .hidden {
   display: none !important;
 }
+
+

@@ -16,7 +16,6 @@ try {
  * Main function  and starting point of the application.
  */
 function main () {
-  applySettings()
   const canvas = document.getElementById('surface')
   const pInfo = document.getElementById('unSupportedInfo')
 
@@ -26,6 +25,7 @@ function main () {
     pInfo.classList.toggle('hidden')
     throw new Error('Unsupported browser')
   }
+  applySettings()
 
   // setup button listening events
   const btnCardOftheDay = document.querySelector('#cardOfTheDay')
@@ -54,21 +54,43 @@ function applySettings () {
   const root = document.documentElement
   root.style.setProperty('--background-color', tarotDeck.settings.backgroundColor)
   root.style.setProperty('--color', tarotDeck.settings.textColor)
+  const canvas = document.getElementById('surface')
+
+  // Get the DPR and size of the canvas
+  const dpr = window.devicePixelRatio
+  const rect = canvas.getBoundingClientRect()
+
+  // Set the "actual" size of the canvas
+  canvas.width = rect.width * dpr
+  canvas.height = rect.height * dpr
+
+  // Scale the context to ensure correct drawing operations
+  const ctx = document.getElementById('surface').getContext('2d')
+  ctx.scale(dpr, dpr)
+
+  // Set the "drawn" size of the canvas
+  canvas.style.width = `${rect.width}px`
+  canvas.style.height = `${rect.height}px`
+
+  tarotDeck.settings.canvasHeight = canvas.height
+  tarotDeck.settings.canvasWidth = canvas.width
+  tarotDeck.settings.cardsHeight = canvas.height * 0.7
+  tarotDeck.settings.cardsWidth = Math.floor((canvas.width) / 5)
+  console.log(tarotDeck.settings.cardsWidth)
 }
 
 /**
  * Card of the day. Draw and display one card representing your day.
  */
 function cardOftheDay () {
-  console.log('card of the day - not yet implememted.')
-  tarotDeck.writeCardFrame(50, 50)
+  tarotDeck.displayCardOfTheDay()
 }
 
 /**
  * Draw and display three card representing something.
  */
 function threeCardsSpread () {
-  console.log('three card spread - not yet implememted.')
+  tarotDeck.displayThreeCardSpread()
 }
 
 /**

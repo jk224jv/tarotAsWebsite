@@ -9,8 +9,10 @@ export const tarotDeck = {
   settings: {
     backgroundColor: 'black',
     textColor: 'limegreen',
-    cardsWidth: 75,
-    cardsHeight: 150,
+    cardsWidth: 65,
+    cardsHeight: 125,
+    canvasWidth: 0,
+    canvasHeight: 0,
     default: {
       backgroundColor: 'black', // DO NOT MODIFY!
       textColor: 'limegreen' // DO NOT MODIFY!
@@ -18,6 +20,11 @@ export const tarotDeck = {
   },
 
   cardsTemplate: {
+    major: {
+      top: 0,
+      center: 1,
+      bottom: 0
+    },
     1: {
       top: 0,
       center: 1,
@@ -594,7 +601,7 @@ export const tarotDeck = {
     ctx.globalAlpha = 1
     ctx.fillStyle = this.settings.textColor
     ctx.fillRect(x, y, this.settings.cardsWidth, this.settings.cardsHeight)
-    ctx.clearRect(x + 1, y + 1, this.settings.cardsWidth - 3, this.settings.cardsHeight - 3)
+    ctx.clearRect(x + 1, y + 1, this.settings.cardsWidth - 2, this.settings.cardsHeight - 2)
   },
   /**
    * Write a tarot card content at cordinates.
@@ -605,36 +612,38 @@ export const tarotDeck = {
    * @param {string} significance - what does the card reprecent?
    */
   writeCardContent (x, y, pulledCard, significance) {
+    const ctx = document.getElementById('surface').getContext('2d')
     let cardSuit = ''
     let cardSuitIcon = ''
     let card = 0
     let turned = ''
 
     // get position of card significance and write
-    stdout.cursorTo(x + Math.floor((this.settings.cardsWidth / 2) - (significance.length / 2)), y - 3)
-    stdout.write(significance)
+    ctx.font = '24px monospace'
+    ctx.textAlign = 'center'
+    ctx.fillText(significance, x + this.settings.cardsWidth / 2, y - 50)
 
     if (pulledCard >= 1 && pulledCard <= 14) { // is the random card from rods?
       cardSuit = 'rods'
-      cardSuitIcon = '|'
+      cardSuitIcon = document.getElementById('rod')
       card = pulledCard
     }
 
     if (pulledCard >= 15 && pulledCard <= 28) { // is the random card from cogs?
       cardSuit = 'cogs'
-      cardSuitIcon = '☼'
+      cardSuitIcon = document.getElementById('cog')
       card = pulledCard % 14
     }
 
     if (pulledCard >= 29 && pulledCard <= 42) { // is the random card from sharp?
       cardSuit = 'sharp'
-      cardSuitIcon = '#'
+      cardSuitIcon = document.getElementById('sharp')
       card = pulledCard % 14
     }
 
     if (pulledCard >= 43 && pulledCard <= 56) { // is the random card from blades?
       cardSuit = 'blades'
-      cardSuitIcon = '/'
+      cardSuitIcon = document.getElementById('sword')
       card = pulledCard % 14
     }
     if (card === 0) {
@@ -658,46 +667,47 @@ export const tarotDeck = {
     cardName += ' - ' + turned
 
     // get to location for cardname and write
-    stdout.cursorTo(x + Math.floor((this.settings.cardsWidth - cardName.length) / 2) + 1, y - 1)
-    stdout.write(cardName)
+    ctx.font = '18px monospace'
+    ctx.fillText(cardName, x + this.settings.cardsWidth / 2, y - 25)
 
     // get to location for Top Icons and write
-    stdout.cursorTo(x + 3, y + 3)
-    if (pulledCard > 56) { // if from the major arcana, use that template.
-      stdout.write(this.cardsTemplate.Major.top)
-    } else {
-      stdout.write(this.cardsTemplate[card].top.replaceAll('x', cardSuitIcon))
+    if (pulledCard < 56) {
+      for (let i = 0; i < this.cardsTemplate[card].top; i++) {
+        ctx.drawImage(cardSuitIcon,
+          (x + 15 + 60 * i),
+          y + 15)
+      }
     }
 
     // get to location for Center Icons and write
-    if (pulledCard > 56) { // if from the major arcana, use that template.
-      stdout.cursorTo(x + Math.ceil(this.settings.cardsWidth / 2) - 3, y + Math.ceil(this.settings.cardsHeight / 2) - 2)
-      stdout.write(this.cardsTemplate.Major.special1)
-      stdout.cursorTo(x + Math.ceil(this.settings.cardsWidth / 2) - 3, y + Math.ceil(this.settings.cardsHeight / 2))
-      stdout.write(this.cardsTemplate.Major.special2)
-      stdout.cursorTo(x + Math.ceil(this.settings.cardsWidth / 2) - 3, y + Math.ceil(this.settings.cardsHeight / 2) + 2)
-      stdout.write(this.cardsTemplate.Major.special3)
+    if (pulledCard > 56) {
+      const cultLogo = document.getElementById('center')
+      ctx.drawImage(cultLogo, x + Math.floor(this.settings.cardsWidth / 2) - 60, y + Math.floor(this.settings.cardsHeight / 2) - 60, 120, 120)
     } else {
-      stdout.cursorTo(x + Math.ceil((this.settings.cardsWidth / 2) - (this.cardsTemplate[card].center.length / 2)), y + Math.ceil(this.settings.cardsHeight / 2))
-      stdout.write(this.cardsTemplate[card].center.replaceAll('x', cardSuitIcon))
+      const icons = this.cardsTemplate[card].center
+      for (let i = 0; i < icons; i++) {
+        ctx.drawImage(cardSuitIcon,
+          (x + Math.floor(this.settings.cardsWidth / 2) - (icons * 30) + (60 * i)),
+          y + Math.floor(this.settings.cardsHeight / 2) - 30)
+      }
     }
 
     // get to location for Bottom Icons and write
-    stdout.cursorTo(x, y + this.settings.cardsHeight - 3)
-    if (pulledCard > 56) { // if from the major arcana, use that template.
-      readline.moveCursor(stdout, (this.settings.cardsWidth - this.cardsTemplate.Major.bottom.length - 2), 0)
-      stdout.write(this.cardsTemplate.Major.bottom)
-    } else {
-      readline.moveCursor(stdout, (this.settings.cardsWidth - this.cardsTemplate[card].bottom.length - 2), 0)
-      stdout.write(this.cardsTemplate[card].top.replaceAll('x', cardSuitIcon))
+    if (pulledCard < 56) {
+      const icons = this.cardsTemplate[card].bottom
+      for (let i = 0; i < this.cardsTemplate[card].bottom; i++) {
+        ctx.drawImage(
+          cardSuitIcon,
+          (x + this.settings.cardsWidth - 15 - (icons * 60) + (60 * i)),
+          (y + this.settings.cardsHeight - 75))
+      }
     }
 
     // get to location of description and write
-    stdout.cursorTo(x, y + this.settings.cardsHeight + 3)
-    stdout.write('Meaning :')
-    stdout.cursorTo(x, y + this.settings.cardsHeight + 4)
     try {
-      stdout.write(this[cardSuit][card][turned])
+      ctx.fillText(this[cardSuit][card][turned],
+        x + this.settings.cardsWidth / 2,
+        y + this.settings.cardsHeight + 25)
     } catch (error) {
       console.error(`Error : trying to located ${card}, ${cardSuit}, ${turned}`)
     }
@@ -712,7 +722,6 @@ export const tarotDeck = {
    * @param {string} significance - what does the card reprecent?
    */
   writeCard (x, y, pulledCard, significance = 'Card of the day') {
-    stdout.cursorTo(x, y)
     this.writeCardFrame(x, y)
     this.writeCardContent(x, y, pulledCard, significance)
   },
@@ -723,7 +732,11 @@ export const tarotDeck = {
    */
   displayCardOfTheDay () {
     this.pullCards(1)
-    this.writeCard(Math.floor((this.settings.terminalWidth - this.settings.cardsWidth) / 2), 10, this.pulledCards[0])
+    this.clear()
+    this.writeCard(
+      Math.floor((this.settings.canvasWidth - this.settings.cardsWidth) / 2),
+      this.settings.canvasHeight * 0.15,
+      this.pulledCards[0])
   },
 
   /**
@@ -732,11 +745,14 @@ export const tarotDeck = {
    */
   displayThreeCardSpread () {
     this.pullCards(3)
+    this.clear()
     const significance = ['The Past', 'The Present', 'The Future']
-    const xOrigin = Math.floor(this.settings.terminalWidth / 4) - Math.floor(this.settings.cardsWidth / 2)
-    const xDistance = Math.floor(this.settings.terminalWidth / 4)
+    const xDistance = Math.floor(this.settings.canvasWidth / 5)
     for (let i = 0; i < this.pulledCards.length; i++) {
-      this.writeCard((xOrigin + (xDistance * i)), (10 + (2 * (i % 2))), this.pulledCards[i], significance[i])
+      this.writeCard(
+        Math.floor((0.5 * xDistance) + (1.5 * xDistance * i)),
+        this.settings.canvasHeight * 0.15,
+        this.pulledCards[i], significance[i])
     }
   },
 
@@ -750,5 +766,13 @@ export const tarotDeck = {
       this.writeCard(Math.floor((this.settings.terminalWidth - this.settings.cardsWidth) / 2), 10, i)
       // this.getCommand()
     }
+  },
+  /**
+   * Empties the canvas.
+   */
+  clear () {
+    const canvas = document.getElementById('surface')
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, this.settings.canvasWidth, this.settings.canvasHeight)
   }
 }
