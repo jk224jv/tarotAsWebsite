@@ -133,9 +133,3 @@ function exit () {
   ctx.lineTo(Math.floor(canvas.width * 0.8), yOringin + 240)
   ctx.stroke()
 }
-/**
- * Display settings form and handle new settings.
- */
-function settings () {
-  console.log('setting - not yet implememted.')
-}
